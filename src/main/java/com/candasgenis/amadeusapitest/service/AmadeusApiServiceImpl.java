@@ -4,6 +4,7 @@ import com.amadeus.Amadeus;
 import com.amadeus.Params;
 import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.Location;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,6 @@ public class AmadeusApiServiceImpl implements AmadeusApiService {
     public AmadeusApiServiceImpl(@Value("${amadeus.client.id}") String clientId, @Value("${amadeus.client.secret}") String clientSecret) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-        System.out.println("CLIENT ID VE SECRET PRINTLENIYOR");
-        System.out.println(this.clientId);
-        System.out.println(this.clientSecret);
         this.amadeus = this.getAmadeus(this.clientId, this.clientSecret);
     }
 
@@ -28,8 +26,9 @@ public class AmadeusApiServiceImpl implements AmadeusApiService {
                 .build();
     }
 
-    public Location[] getLocations(String keyword, String subType) throws ResponseException {
+    public JsonObject getLocations(String keyword, String subType) throws ResponseException {
         Params params = Params.with("keyword", keyword).and("subType", subType);
-        return this.amadeus.referenceData.locations.get(params);
+        Location[] locations = this.amadeus.referenceData.locations.get(params);
+        return locations[0].getResponse().getResult();
     }
 }
