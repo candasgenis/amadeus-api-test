@@ -15,8 +15,15 @@ public class AmadeusApiController {
         this.amadeusApiServiceImpl = amadeusApiServiceImpl;
     }
 
-    @GetMapping("/amadeus/getLocations")
+    @GetMapping("/amadeus/locations")
     public JsonObject getLocations(@RequestParam String keyword, @RequestParam String subType) throws ResponseException {
         return amadeusApiServiceImpl.getLocations(keyword, subType);
+    }
+
+    @GetMapping("/amadeus/shopping/flight-offers")
+    public JsonObject flightOffersSearch(@RequestParam String originLocationCode, @RequestParam String destinationLocationCode,
+                                     @RequestParam String departureDate, @RequestParam String adults) throws ResponseException {
+        return amadeusApiServiceImpl.getFlightOfferSearch(originLocationCode, destinationLocationCode,
+                departureDate, adults);
     }
 }
